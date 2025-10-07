@@ -51,6 +51,7 @@ public static class DependencyInjection
 
         // Services
         services.AddTransient<IDateTime, DateTimeService>();
+        services.AddScoped<IAuthenticationService, AuthenticationService>();
 
         return services;
     }

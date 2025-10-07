@@ -13,6 +13,11 @@ namespace WhatsNext.Domain.Entities;
 public class User : BaseEntity
 {
     /// <summary>
+    /// Gets or sets the username (unique identifier for login).
+    /// </summary>
+    public string Username { get; set; } = string.Empty;
+
+    /// <summary>
     /// Gets or sets the user's email address.
     /// </summary>
     public string Email { get; set; } = string.Empty;
@@ -21,6 +26,11 @@ public class User : BaseEntity
     /// Gets or sets the user's hashed password.
     /// </summary>
     public string PasswordHash { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the user's roles (e.g., "User", "Admin").
+    /// </summary>
+    public List<string> Roles { get; set; } = new();
 
     /// <summary>
     /// Gets or sets the user's first name.

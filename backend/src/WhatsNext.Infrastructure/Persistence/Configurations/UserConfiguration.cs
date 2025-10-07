@@ -21,6 +21,13 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.HasKey(u => u.Id);
 
+        builder.Property(u => u.Username)
+            .IsRequired()
+            .HasMaxLength(50);
+
+        builder.HasIndex(u => u.Username)
+            .IsUnique();
+
         builder.Property(u => u.Email)
             .IsRequired()
             .HasMaxLength(256);
@@ -31,6 +38,12 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.PasswordHash)
             .IsRequired()
             .HasMaxLength(512);
+
+        builder.Property(u => u.Roles)
+            .HasConversion(
+                v => string.Join(',', v),
+                v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList())
+            .HasMaxLength(500);
 
         builder.Property(u => u.FirstName)
             .IsRequired()
