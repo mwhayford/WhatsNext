@@ -1,0 +1,54 @@
+# Auto-labeler configuration for pull requests
+
+backend:
+  - changed-files:
+    - any-glob-to-any-file: 'backend/**'
+
+frontend:
+  - changed-files:
+    - any-glob-to-any-file: 'frontend/**'
+
+documentation:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'docs/**'
+      - '*.md'
+      - 'README.md'
+      - 'CONTRIBUTING.md'
+
+ci/cd:
+  - changed-files:
+    - any-glob-to-any-file: '.github/**'
+
+dependencies:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'frontend/package.json'
+      - 'frontend/package-lock.json'
+      - 'backend/**/*.csproj'
+      - 'backend/Directory.Build.props'
+
+configuration:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/.editorconfig'
+      - '**/appsettings*.json'
+      - '**/.eslintrc.*'
+      - '**/.prettierrc*'
+      - '**/stylecop.json'
+      - '**/tsconfig*.json'
+      - '**/vite.config.*'
+
+database:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'backend/**/Persistence/**'
+      - 'backend/**/Migrations/**'
+
+tests:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'backend/tests/**'
+      - 'frontend/**/*.test.*'
+      - 'frontend/**/*.spec.*'
+

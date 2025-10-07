@@ -1,0 +1,84 @@
+name: Pull Request Validation
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  validate-pr:
+    name: Validate Pull Request
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🔍 Check PR title
+        uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            feat
+            fix
+            docs
+            style
+            refactor
+            perf
+            test
+            build
+            ci
+            chore
+            revert
+          requireScope: false
+
+      - name: 📝 Check PR description
+        run: |
+          PR_BODY="${{ github.event.pull_request.body }}"
+          if [ -z "$PR_BODY" ] || [ ${#PR_BODY} -lt 20 ]; then
+            echo "❌ PR description is too short or empty. Please provide a meaningful description."
+            exit 1
+          fi
+          echo "✅ PR description looks good!"
+
+      - name: 📊 Check changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v44
+        with:
+          files: |
+            backend/**
+            frontend/**
+            .github/**
+
+      - name: 📋 Summary
+        run: |
+          echo "## 📊 Pull Request Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Changed Files:** ${{ steps.changed-files.outputs.all_changed_files_count }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.changed-files.outputs.any_changed }}" == "true" ]; then
+            echo "### Changed Areas:" >> $GITHUB_STEP_SUMMARY
+            echo "- Backend: ${{ contains(steps.changed-files.outputs.all_changed_files, 'backend/') }}" >> $GITHUB_STEP_SUMMARY
+            echo "- Frontend: ${{ contains(steps.changed-files.outputs.all_changed_files, 'frontend/') }}" >> $GITHUB_STEP_SUMMARY
+            echo "- CI/CD: ${{ contains(steps.changed-files.outputs.all_changed_files, '.github/') }}" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  label-pr:
+    name: Label Pull Request
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🏷️ Auto-label PR
+        uses: actions/labeler@v5
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          configuration-path: .github/labeler.yml
+

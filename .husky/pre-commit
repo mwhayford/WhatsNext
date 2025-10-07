@@ -1,0 +1,22 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔍 Running pre-commit checks..."
+
+# Frontend checks
+cd frontend
+echo "📦 Checking frontend..."
+npm run lint-staged
+cd ..
+
+# Backend checks
+echo "🔧 Checking backend..."
+cd backend
+dotnet format --verify-no-changes --verbosity quiet
+if [ $? -ne 0 ]; then
+  echo "❌ Backend formatting issues found. Run 'dotnet format' to fix."
+  exit 1
+fi
+cd ..
+
+echo "✅ Pre-commit checks passed!"
