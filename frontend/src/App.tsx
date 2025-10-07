@@ -4,6 +4,7 @@ import { ProtectedRoute } from './components/layout/ProtectedRoute';
 import { DashboardLayout } from './components/layout/DashboardLayout';
 import { Login } from './pages/auth/Login';
 import { Register } from './pages/auth/Register';
+import { GoogleCallback } from './pages/auth/GoogleCallback';
 import { Dashboard } from './pages/dashboard/Dashboard';
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
           {/* Public routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/auth/google/callback" element={<GoogleCallback />} />
 
           {/* Protected routes */}
           <Route

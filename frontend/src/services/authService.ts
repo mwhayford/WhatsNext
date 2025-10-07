@@ -12,6 +12,13 @@ export const authService = {
     return response.data;
   },
 
+  async loginWithGoogle(accessToken: string): Promise<AuthResponse> {
+    const response = await api.post<AuthResponse>('/authentication/google', {
+      accessToken,
+    });
+    return response.data;
+  },
+
   saveToken(token: string): void {
     localStorage.setItem('token', token);
   },

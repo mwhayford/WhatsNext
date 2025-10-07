@@ -59,4 +59,16 @@ public interface IAuthenticationService
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>True if the logout was successful.</returns>
     Task<bool> LogoutAllAsync(int userId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Authenticates a user with an external provider (Google, Microsoft, etc.).
+    /// </summary>
+    /// <param name="provider">The authentication provider.</param>
+    /// <param name="accessToken">The access token from the external provider.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Authentication result or null if authentication failed.</returns>
+    Task<AuthenticationResult?> AuthenticateWithExternalProviderAsync(
+        string provider, 
+        string accessToken, 
+        CancellationToken cancellationToken = default);
 }

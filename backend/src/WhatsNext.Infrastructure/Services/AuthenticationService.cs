@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -25,6 +26,7 @@ public class AuthenticationService : IAuthenticationService
     private readonly IConfiguration configuration;
     private readonly IApplicationDbContext context;
     private readonly ISessionService sessionService;
+    private readonly IExternalAuthenticationService externalAuthService;
     private readonly ILogger<AuthenticationService> logger;
 
     /// <summary>
@@ -33,16 +35,19 @@ public class AuthenticationService : IAuthenticationService
     /// <param name="configuration">The configuration.</param>
     /// <param name="context">The database context.</param>
     /// <param name="sessionService">The session service.</param>
+    /// <param name="externalAuthService">The external authentication service.</param>
     /// <param name="logger">The logger.</param>
     public AuthenticationService(
         IConfiguration configuration, 
         IApplicationDbContext context, 
         ISessionService sessionService,
+        IExternalAuthenticationService externalAuthService,
         ILogger<AuthenticationService> logger)
     {
         this.configuration = configuration;
         this.context = context;
         this.sessionService = sessionService;
+        this.externalAuthService = externalAuthService;
         this.logger = logger;
     }
 
@@ -192,5 +197,108 @@ public class AuthenticationService : IAuthenticationService
             this.logger.LogError(ex, "Error during logout all for user {UserId}", userId);
             return false;
         }
+    }
+
+    /// <summary>
+    /// Authenticates a user with an external provider (Google, Microsoft, etc.).
+    /// </summary>
+    /// <param name="provider">The authentication provider.</param>
+    /// <param name="accessToken">The access token from the external provider.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Authentication result or null if authentication failed.</returns>
+    public async Task<AuthenticationResult?> AuthenticateWithExternalProviderAsync(
+        string provider, 
+        string accessToken, 
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            // Authenticate with external provider
+            var externalResult = await this.externalAuthService.AuthenticateAsync(provider, accessToken, cancellationToken);
+            
+            if (externalResult == null)
+            {
+                this.logger.LogWarning("External authentication failed for provider: {Provider}", provider);
+                return null;
+            }
+
+            // Find or create user
+            var user = await this.FindOrCreateUserAsync(externalResult, cancellationToken);
+            
+            if (user == null)
+            {
+                this.logger.LogError("Failed to find or create user for external authentication");
+                return null;
+            }
+
+            // Generate JWT token using existing logic
+            var authResult = await this.GenerateTokenAsync(user, cancellationToken);
+            
+            this.logger.LogInformation("Successfully authenticated user {UserId} with provider {Provider}", user.Id, provider);
+            return authResult;
+        }
+        catch (Exception ex)
+        {
+            this.logger.LogError(ex, "Error during external authentication with provider {Provider}", provider);
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Finds an existing user or creates a new one based on external authentication result.
+    /// </summary>
+    /// <param name="externalResult">External authentication result.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>User entity or null if creation failed.</returns>
+    private async Task<User?> FindOrCreateUserAsync(ExternalAuthenticationResult externalResult, CancellationToken cancellationToken)
+    {
+        try
+        {
+            // Try to find existing user by email
+            var existingUser = await this.context.Users
+                .FirstOrDefaultAsync(u => u.Email == externalResult.Email, cancellationToken);
+
+            if (existingUser != null)
+            {
+                this.logger.LogInformation("Found existing user {UserId} for email {Email}", existingUser.Id, externalResult.Email);
+                return existingUser;
+            }
+
+            // Create new user
+            var newUser = new User
+            {
+                Username = this.GenerateUsernameFromEmail(externalResult.Email),
+                Email = externalResult.Email,
+                PasswordHash = string.Empty, // No password for external auth users
+                Roles = new List<string> { "User" },
+                CreatedAt = DateTime.UtcNow,
+                FirstName = externalResult.FirstName,
+                LastName = externalResult.LastName,
+                EmailConfirmed = true, // External auth users have verified emails
+            };
+
+            this.context.Users.Add(newUser);
+            await this.context.SaveChangesAsync(cancellationToken);
+
+            this.logger.LogInformation("Created new user {UserId} for external authentication", newUser.Id);
+            return newUser;
+        }
+        catch (Exception ex)
+        {
+            this.logger.LogError(ex, "Error finding or creating user for external authentication");
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Generates a username from an email address.
+    /// </summary>
+    /// <param name="email">Email address.</param>
+    /// <returns>Generated username.</returns>
+    private string GenerateUsernameFromEmail(string email)
+    {
+        var localPart = email.Split('@')[0];
+        var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        return $"{localPart}_{timestamp}";
     }
 }

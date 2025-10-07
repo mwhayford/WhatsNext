@@ -41,6 +41,13 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret)),
         ClockSkew = TimeSpan.Zero,
     };
+})
+.AddGoogle(options =>
+{
+    var googleSettings = builder.Configuration.GetSection("GoogleOAuth");
+    options.ClientId = googleSettings["ClientId"] ?? throw new InvalidOperationException("Google ClientId is not configured.");
+    options.ClientSecret = googleSettings["ClientSecret"] ?? throw new InvalidOperationException("Google ClientSecret is not configured.");
+    options.CallbackPath = "/api/authentication/google-callback";
 });
 
 builder.Services.AddAuthorization();

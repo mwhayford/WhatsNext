@@ -54,6 +54,10 @@ public static class DependencyInjection
         services.AddScoped<IAuthenticationService, AuthenticationService>();
         services.AddSingleton<IRedisService, RedisService>();
         services.AddScoped<ISessionService, SessionService>();
+        
+        // External Authentication Services
+        services.AddHttpClient<GoogleAuthenticationService>();
+        services.AddScoped<IExternalAuthenticationService, GoogleAuthenticationService>();
 
         return services;
     }

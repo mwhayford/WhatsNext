@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import type { AuthContextType, User, RegisterRequest } from '../types/auth';
 import { authService } from '../services/authService';
+import { googleAuthService } from '../services/googleAuthService';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -79,6 +80,27 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
+  const loginWithGoogle = async () => {
+    try {
+      const accessToken = await googleAuthService.signIn();
+      const response = await authService.loginWithGoogle(accessToken);
+      
+      authService.saveToken(response.token);
+      authService.saveUser(response);
+      
+      setToken(response.token);
+      setUser({
+        userId: response.userId,
+        username: response.username,
+        email: response.email,
+        roles: response.roles,
+      });
+    } catch (error) {
+      console.error('Google login error:', error);
+      throw error;
+    }
+  };
+
   const logout = () => {
     authService.clearAuth();
     setToken(null);
@@ -92,6 +114,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     isLoading,
     login,
     register,
+    loginWithGoogle,
     logout,
   };
 

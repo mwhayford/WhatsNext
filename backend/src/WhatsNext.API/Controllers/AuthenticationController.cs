@@ -141,4 +141,60 @@ public class AuthenticationController : ControllerBase
             return this.StatusCode(500, new { message = "An error occurred during logout all." });
         }
     }
+
+    /// <summary>
+    /// Authenticates a user with Google OAuth.
+    /// </summary>
+    /// <param name="request">The Google OAuth request containing the access token.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The authentication result with JWT token.</returns>
+    [HttpPost("google")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> GoogleAuth([FromBody] GoogleAuthRequest request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(request.AccessToken))
+            {
+                return this.BadRequest(new { message = "Access token is required." });
+            }
+
+            var result = await this.authService.AuthenticateWithExternalProviderAsync("Google", request.AccessToken, cancellationToken);
+            
+            if (result == null)
+            {
+                return this.Unauthorized(new { message = "Google authentication failed." });
+            }
+
+            return this.Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return this.StatusCode(500, new { message = "An error occurred during Google authentication." });
+        }
+    }
+
+    /// <summary>
+    /// Gets the supported OAuth providers.
+    /// </summary>
+    /// <returns>List of supported providers.</returns>
+    [HttpGet("providers")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public IActionResult GetProviders()
+    {
+        return this.Ok(new { providers = new[] { "Google" } });
+    }
+}
+
+/// <summary>
+/// Google OAuth authentication request.
+/// </summary>
+public class GoogleAuthRequest
+{
+    /// <summary>
+    /// Gets or sets the Google access token.
+    /// </summary>
+    public string AccessToken { get; set; } = string.Empty;
 }
