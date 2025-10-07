@@ -10,15 +10,23 @@ A production-grade, portfolio-worthy personal dashboard application built with C
 
 ## 🚀 Features
 
-### Phase 1 (MVP)
-- ✅ **User Authentication** - JWT-based secure authentication
-- ✅ **Habit Tracker** - Track daily habits with streak visualization
-- ✅ **Task Manager** - Create, organize, and complete tasks
-- ✅ **Pomodoro Timer** - Productivity timer with session tracking
-- ✅ **Quote Generator** - Daily motivational quotes
-- ✅ **Weather Widget** - Real-time weather information
+### Currently Implemented
+- ✅ **User Authentication** - JWT-based secure authentication (Register & Login)
+- ✅ **Database Models** - Full schema for habits, tasks, timer sessions, and quotes
+- ✅ **Docker Support** - Complete containerization with PostgreSQL
+- ✅ **CI/CD Pipeline** - Automated testing and deployment
+- ✅ **API Documentation** - Swagger/OpenAPI integration
+- ✅ **Clean Architecture** - CQRS pattern with MediatR
+- ✅ **Developer Tooling** - Linters, pre-commit hooks, comprehensive docs
+
+### In Progress (Backend Ready)
+- 🔨 **Habit Tracker** - Track daily habits with streak visualization
+- 🔨 **Task Manager** - Create, organize, and complete tasks
+- 🔨 **Pomodoro Timer** - Productivity timer with session tracking
+- 🔨 **Quote Generator** - Daily motivational quotes
 
 ### Coming Soon
+- 📝 Weather Widget integration
 - 📝 Note Taking with rich text editor
 - 📊 Analytics Dashboard with productivity insights
 - 🎯 Goal Tracking with milestone celebrations
@@ -27,41 +35,48 @@ A production-grade, portfolio-worthy personal dashboard application built with C
 ## 🛠️ Tech Stack
 
 ### Backend
-- **Framework**: .NET 8.0 (ASP.NET Core Web API)
+- **Framework**: .NET 9.0 (ASP.NET Core Web API)
 - **Architecture**: Clean Architecture (Onion/Hexagonal)
-- **ORM**: Entity Framework Core 8.0
+- **ORM**: Entity Framework Core 9.0
 - **Database**: SQL Server / PostgreSQL
-- **Authentication**: JWT with refresh tokens
-- **API Documentation**: Swagger/OpenAPI
-- **Logging**: Serilog
+- **Authentication**: JWT Bearer with BCrypt password hashing
+- **API Documentation**: Swagger/OpenAPI (Swashbuckle)
+- **Logging**: Serilog (planned)
 - **Validation**: FluentValidation
 - **Mapping**: AutoMapper
 - **CQRS**: MediatR
 
 ### Frontend
-- **Framework**: React 18+ with TypeScript 5.0+
-- **Styling**: Tailwind CSS 3.4+
+- **Framework**: React 19 with TypeScript 5.9+
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS v4
 - **Routing**: React Router 6
-- **State Management**: Zustand
-- **Data Fetching**: TanStack Query (React Query)
-- **Forms**: React Hook Form + Zod
+- **State Management**: Zustand (planned)
+- **Data Fetching**: TanStack Query (React Query, planned)
+- **Forms**: React Hook Form + Zod (planned)
 - **HTTP Client**: Axios
-- **Charts**: Chart.js / Recharts
+- **Charts**: Chart.js / Recharts (planned)
 - **UI Components**: Custom components with Tailwind
-- **Animations**: Framer Motion
+- **Animations**: Framer Motion (planned)
 
 ### DevOps & Quality
+- **Containerization**: Docker with multi-stage builds
+- **Orchestration**: Docker Compose
 - **Linters**: StyleCop, SonarAnalyzer, Roslynator (C#) | ESLint, Prettier (TypeScript)
-- **Pre-commit Hooks**: Husky with automated linting and testing
-- **CI/CD**: GitHub Actions
-- **Code Coverage**: >80% target
-- **Architecture Tests**: NetArchTest.Rules
-- **Testing**: xUnit, Vitest, React Testing Library, Playwright
+- **Pre-commit Hooks**: Husky with automated linting and formatting
+- **CI/CD**: GitHub Actions (Backend, Frontend, PR Validation, Dependency Review)
+- **Code Coverage**: >80% target (infrastructure ready)
+- **Architecture Tests**: NetArchTest.Rules (planned)
+- **Testing**: xUnit, Vitest, React Testing Library (planned)
 
 ## 📋 Prerequisites
 
-### Required
-- [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+### For Docker (Recommended)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop) 20.10+
+- [Docker Compose](https://docs.docker.com/compose/install/) 2.0+ (included with Docker Desktop)
+
+### For Local Development
+- [.NET 9.0 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
 - [Node.js 20.x LTS](https://nodejs.org/)
 - [SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) or [PostgreSQL](https://www.postgresql.org/)
 - [Git](https://git-scm.com/)
@@ -69,15 +84,44 @@ A production-grade, portfolio-worthy personal dashboard application built with C
 ### Recommended
 - [Visual Studio 2022](https://visualstudio.microsoft.com/) or [JetBrains Rider](https://www.jetbrains.com/rider/)
 - [VS Code](https://code.visualstudio.com/)
-- [Docker Desktop](https://www.docker.com/products/docker-desktop) (optional, for containerized database)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop) (for containerization)
 
 ## 🚦 Getting Started
+
+You can run WhatsNext in two ways:
+
+### Option 1: Docker (Recommended) 🐳
+
+**Fastest way to get started!** Everything runs in containers:
+
+```bash
+# Clone the repository
+git clone https://github.com/mwhayford/WhatsNext.git
+cd WhatsNext
+
+# Create environment file
+cp env.example .env
+
+# Start with Docker Compose
+docker-compose up -d
+
+# Access the application
+# Frontend:  http://localhost:3000
+# Backend:   http://localhost:5000/api
+# Swagger:   http://localhost:5000/swagger
+```
+
+📖 **[Complete Docker Documentation](docs/DOCKER.md)**
+
+### Option 2: Local Development
+
+Full local setup with your own database:
 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/whatsnext.git
-cd whatsnext
+git clone https://github.com/mwhayford/WhatsNext.git
+cd WhatsNext
 ```
 
 ### 2. Backend Setup
