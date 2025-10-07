@@ -17,8 +17,9 @@ public interface IAuthenticationService
     /// Generates a JWT token for the specified user.
     /// </summary>
     /// <param name="user">The user to generate a token for.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>An authentication result containing the token.</returns>
-    AuthenticationResult GenerateToken(User user);
+    Task<AuthenticationResult> GenerateTokenAsync(User user, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Validates a refresh token and generates a new access token.
@@ -42,4 +43,20 @@ public interface IAuthenticationService
     /// <param name="hash">The hash to verify against.</param>
     /// <returns>True if the password matches the hash.</returns>
     bool VerifyPassword(string password, string hash);
+
+    /// <summary>
+    /// Logs out a user by blacklisting their token.
+    /// </summary>
+    /// <param name="tokenId">The token ID to blacklist.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>True if the logout was successful.</returns>
+    Task<bool> LogoutAsync(string tokenId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Logs out all sessions for a user.
+    /// </summary>
+    /// <param name="userId">The user ID to logout.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>True if the logout was successful.</returns>
+    Task<bool> LogoutAllAsync(int userId, CancellationToken cancellationToken = default);
 }

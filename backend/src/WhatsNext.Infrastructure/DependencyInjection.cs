@@ -52,6 +52,8 @@ public static class DependencyInjection
         // Services
         services.AddTransient<IDateTime, DateTimeService>();
         services.AddScoped<IAuthenticationService, AuthenticationService>();
+        services.AddSingleton<IRedisService, RedisService>();
+        services.AddScoped<ISessionService, SessionService>();
 
         return services;
     }

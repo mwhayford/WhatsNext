@@ -66,6 +66,6 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Authentic
         await this.context.SaveChangesAsync(cancellationToken);
 
         // Generate token
-        return this.authService.GenerateToken(user);
+        return await this.authService.GenerateTokenAsync(user, cancellationToken);
     }
 }

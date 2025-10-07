@@ -50,6 +50,6 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, AuthenticationR
         }
 
         // Generate token
-        return this.authService.GenerateToken(user);
+        return await this.authService.GenerateTokenAsync(user, cancellationToken);
     }
 }
