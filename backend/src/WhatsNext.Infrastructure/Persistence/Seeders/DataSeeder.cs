@@ -1,5 +1,7 @@
+// <copyright file="DataSeeder.cs" company="WhatsNext">
 // Copyright (c) WhatsNext. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -13,8 +15,8 @@ namespace WhatsNext.Infrastructure.Persistence.Seeders;
 /// </summary>
 public class DataSeeder
 {
-    private readonly ApplicationDbContext _context;
-    private readonly ILogger<DataSeeder> _logger;
+    private readonly ApplicationDbContext context;
+    private readonly ILogger<DataSeeder> logger;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DataSeeder"/> class.
@@ -23,8 +25,8 @@ public class DataSeeder
     /// <param name="logger">The logger.</param>
     public DataSeeder(ApplicationDbContext context, ILogger<DataSeeder> logger)
     {
-        _context = context;
-        _logger = logger;
+        this.context = context;
+        this.logger = logger;
     }
 
     /// <summary>
@@ -36,19 +38,19 @@ public class DataSeeder
         try
         {
             // Ensure database is created
-            await _context.Database.MigrateAsync();
+            await this.context.Database.MigrateAsync();
 
             // Seed quotes if none exist
-            if (!await _context.Quotes.AnyAsync())
+            if (!await this.context.Quotes.AnyAsync())
             {
-                await SeedQuotesAsync();
+                await this.SeedQuotesAsync();
             }
 
-            _logger.LogInformation("Database seeding completed successfully");
+            this.logger.LogInformation("Database seeding completed successfully");
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while seeding the database");
+            this.logger.LogError(ex, "An error occurred while seeding the database");
             throw;
         }
     }
@@ -129,10 +131,9 @@ public class DataSeeder
             },
         };
 
-        await _context.Quotes.AddRangeAsync(quotes);
-        await _context.SaveChangesAsync();
+        await this.context.Quotes.AddRangeAsync(quotes);
+        await this.context.SaveChangesAsync();
 
-        _logger.LogInformation("Seeded {Count} quotes", quotes.Count);
+        this.logger.LogInformation("Seeded {Count} quotes", quotes.Count);
     }
 }
-

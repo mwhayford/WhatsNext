@@ -1,5 +1,7 @@
+// <copyright file="DependencyInjection.cs" company="WhatsNext">
 // Copyright (c) WhatsNext. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -53,4 +55,3 @@ public static class DependencyInjection
         return services;
     }
 }
-

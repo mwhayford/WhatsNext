@@ -1,5 +1,7 @@
+// <copyright file="Habit.cs" company="WhatsNext">
 // Copyright (c) WhatsNext. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
 
 using WhatsNext.Domain.Common;
 using WhatsNext.Domain.Enums;
@@ -76,4 +78,3 @@ public class Habit : AuditableEntity
     /// </summary>
     public ICollection<HabitCompletion> Completions { get; set; } = new List<HabitCompletion>();
 }
-

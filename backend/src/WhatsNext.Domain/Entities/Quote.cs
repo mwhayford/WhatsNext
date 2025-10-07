@@ -1,5 +1,7 @@
+// <copyright file="Quote.cs" company="WhatsNext">
 // Copyright (c) WhatsNext. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
 
 using WhatsNext.Domain.Common;
 
@@ -35,4 +37,3 @@ public class Quote : BaseEntity
     /// </summary>
     public ICollection<User> FavoritedByUsers { get; set; } = new List<User>();
 }
-

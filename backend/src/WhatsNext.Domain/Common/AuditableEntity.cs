@@ -1,5 +1,7 @@
+// <copyright file="AuditableEntity.cs" company="WhatsNext">
 // Copyright (c) WhatsNext. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
 
 namespace WhatsNext.Domain.Common;
 
@@ -18,4 +20,3 @@ public abstract class AuditableEntity : BaseEntity
     /// </summary>
     public int? UpdatedBy { get; set; }
 }
-

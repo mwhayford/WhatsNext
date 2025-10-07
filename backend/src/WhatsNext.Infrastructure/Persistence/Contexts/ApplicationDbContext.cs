@@ -1,7 +1,10 @@
+// <copyright file="ApplicationDbContext.cs" company="WhatsNext">
 // Copyright (c) WhatsNext. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
 
 using System.Reflection;
+
 using Microsoft.EntityFrameworkCore;
 using WhatsNext.Application.Common.Interfaces;
 using WhatsNext.Domain.Common;
@@ -14,8 +17,8 @@ namespace WhatsNext.Infrastructure.Persistence.Contexts;
 /// </summary>
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
-    private readonly IDateTime _dateTime;
-    private readonly ICurrentUserService? _currentUserService;
+    private readonly IDateTime dateTime;
+    private readonly ICurrentUserService? currentUserService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ApplicationDbContext"/> class.
@@ -29,8 +32,8 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
         ICurrentUserService? currentUserService = null)
         : base(options)
     {
-        _dateTime = dateTime;
-        _currentUserService = currentUserService;
+        this.dateTime = dateTime;
+        this.currentUserService = currentUserService;
     }
 
     /// <inheritdoc/>
@@ -54,24 +57,24 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     /// <inheritdoc/>
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        foreach (var entry in ChangeTracker.Entries<BaseEntity>())
+        foreach (var entry in this.ChangeTracker.Entries<BaseEntity>())
         {
             switch (entry.State)
             {
                 case EntityState.Added:
-                    entry.Entity.CreatedAt = _dateTime.UtcNow;
+                    entry.Entity.CreatedAt = this.dateTime.UtcNow;
                     if (entry.Entity is AuditableEntity auditableEntity)
                     {
-                        auditableEntity.CreatedBy = _currentUserService?.UserId;
+                        auditableEntity.CreatedBy = this.currentUserService?.UserId;
                     }
 
                     break;
 
                 case EntityState.Modified:
-                    entry.Entity.UpdatedAt = _dateTime.UtcNow;
+                    entry.Entity.UpdatedAt = this.dateTime.UtcNow;
                     if (entry.Entity is AuditableEntity modifiedAuditableEntity)
                     {
-                        modifiedAuditableEntity.UpdatedBy = _currentUserService?.UserId;
+                        modifiedAuditableEntity.UpdatedBy = this.currentUserService?.UserId;
                     }
 
                     break;
@@ -89,4 +92,3 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
         base.OnModelCreating(modelBuilder);
     }
 }
-

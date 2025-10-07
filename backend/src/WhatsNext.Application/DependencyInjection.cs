@@ -1,7 +1,10 @@
+// <copyright file="DependencyInjection.cs" company="WhatsNext">
 // Copyright (c) WhatsNext. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
 
 using System.Reflection;
+
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -32,4 +35,3 @@ public static class DependencyInjection
         return services;
     }
 }
-

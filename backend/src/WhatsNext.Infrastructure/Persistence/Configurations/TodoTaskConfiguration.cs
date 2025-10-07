@@ -1,5 +1,7 @@
+// <copyright file="TodoTaskConfiguration.cs" company="WhatsNext">
 // Copyright (c) WhatsNext. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -52,4 +54,3 @@ public class TodoTaskConfiguration : IEntityTypeConfiguration<TodoTask>
         builder.HasQueryFilter(t => !t.IsDeleted);
     }
 }
-

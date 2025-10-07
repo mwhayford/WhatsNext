@@ -1,5 +1,7 @@
+// <copyright file="UserConfiguration.cs" company="WhatsNext">
 // Copyright (c) WhatsNext. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -72,4 +74,3 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasQueryFilter(u => !u.IsDeleted);
     }
 }
-

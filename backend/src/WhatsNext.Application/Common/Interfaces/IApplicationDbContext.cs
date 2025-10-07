@@ -1,5 +1,7 @@
+// <copyright file="IApplicationDbContext.cs" company="WhatsNext">
 // Copyright (c) WhatsNext. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
 
 using Microsoft.EntityFrameworkCore;
 using WhatsNext.Domain.Entities;
@@ -48,4 +50,3 @@ public interface IApplicationDbContext
     /// <returns>A task that represents the asynchronous save operation. The task result contains the number of state entries written to the database.</returns>
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
-

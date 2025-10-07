@@ -1,5 +1,7 @@
+// <copyright file="User.cs" company="WhatsNext">
 // Copyright (c) WhatsNext. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
 
 using WhatsNext.Domain.Common;
 
@@ -31,9 +33,9 @@ public class User : BaseEntity
     public string LastName { get; set; } = string.Empty;
 
     /// <summary>
-    /// Gets or sets the user's full name.
+    /// Gets the user's full name.
     /// </summary>
-    public string FullName => $"{FirstName} {LastName}".Trim();
+    public string FullName => $"{this.FirstName} {this.LastName}".Trim();
 
     /// <summary>
     /// Gets or sets a value indicating whether the user's email is confirmed.
@@ -75,4 +77,3 @@ public class User : BaseEntity
     /// </summary>
     public ICollection<Quote> FavoriteQuotes { get; set; } = new List<Quote>();
 }
-

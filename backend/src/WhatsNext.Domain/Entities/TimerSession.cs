@@ -1,5 +1,7 @@
+// <copyright file="TimerSession.cs" company="WhatsNext">
 // Copyright (c) WhatsNext. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
 
 using WhatsNext.Domain.Common;
 using WhatsNext.Domain.Enums;
@@ -51,4 +53,3 @@ public class TimerSession : BaseEntity
     /// </summary>
     public string? Notes { get; set; }
 }
-

@@ -1,5 +1,7 @@
+// <copyright file="ICurrentUserService.cs" company="WhatsNext">
 // Copyright (c) WhatsNext. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
 
 namespace WhatsNext.Application.Common.Interfaces;
 
@@ -23,4 +25,3 @@ public interface ICurrentUserService
     /// </summary>
     bool IsAuthenticated { get; }
 }
-
