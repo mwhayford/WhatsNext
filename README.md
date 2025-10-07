@@ -1,7 +1,7 @@
 # WhatsNext - Personal Productivity Dashboard
 
-[![Backend CI/CD](https://img.shields.io/badge/backend-CI%2FCD-blue)](https://github.com/yourusername/whatsnext)
-[![Frontend CI/CD](https://img.shields.io/badge/frontend-CI%2FCD-green)](https://github.com/yourusername/whatsnext)
+[![Backend CI/CD](https://github.com/mwhayford/WhatsNext/workflows/Backend%20CI%2FCD/badge.svg)](https://github.com/mwhayford/WhatsNext/actions)
+[![Frontend CI/CD](https://github.com/mwhayford/WhatsNext/workflows/Frontend%20CI%2FCD/badge.svg)](https://github.com/mwhayford/WhatsNext/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A production-grade, portfolio-worthy personal dashboard application built with C# Web API backend and React.js frontend. This project demonstrates enterprise-level code quality, DevOps best practices, and modern full-stack development.
