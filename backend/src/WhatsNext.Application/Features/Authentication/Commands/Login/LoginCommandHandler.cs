@@ -53,4 +53,3 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, AuthenticationR
         return this.authService.GenerateToken(user);
     }
 }
-

@@ -45,4 +45,3 @@ public class AuthenticationResult
     /// </summary>
     public List<string> Roles { get; set; } = new();
 }
-

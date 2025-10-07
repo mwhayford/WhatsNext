@@ -1,0 +1,51 @@
+# Build results
+**/bin/
+**/obj/
+**/out/
+
+# Test results
+**/TestResults/
+
+# User-specific files
+**/*.user
+**/*.userosscache
+**/*.suo
+
+# IDE
+**/.vs/
+**/.vscode/
+**/.idea/
+
+# NuGet
+**/*.nupkg
+**/*.snupkg
+**/packages/
+**/.nuget/
+
+# Build artifacts
+**/publish/
+**/dist/
+
+# OS files
+**/.DS_Store
+**/Thumbs.db
+
+# Git
+**/.git/
+**/.gitignore
+**/.gitattributes
+
+# Documentation
+**/*.md
+!README.md
+
+# Docker
+**/Dockerfile*
+**/.dockerignore
+**/docker-compose*
+
+# Misc
+**/node_modules/
+**/.env
+**/*.log
+

@@ -6,6 +6,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using WhatsNext.Application.Common.Interfaces;
@@ -92,7 +93,7 @@ public class AuthenticationService : IAuthenticationService
         // 2. Check if it's expired
         // 3. Generate a new access token
         // 4. Optionally rotate the refresh token
-        
+
         // For now, returning null (simplified implementation)
         await Task.CompletedTask;
         return null;
@@ -110,4 +111,3 @@ public class AuthenticationService : IAuthenticationService
         return BCrypt.Net.BCrypt.Verify(password, hash);
     }
 }
-

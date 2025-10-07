@@ -33,4 +33,3 @@ public class RegisterCommand : IRequest<AuthenticationResult>
     /// </summary>
     public string ConfirmPassword { get; set; } = string.Empty;
 }
-

@@ -69,4 +69,3 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Authentic
         return this.authService.GenerateToken(user);
     }
 }
-

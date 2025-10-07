@@ -23,4 +23,3 @@ public class LoginCommand : IRequest<AuthenticationResult>
     /// </summary>
     public string Password { get; set; } = string.Empty;
 }
-

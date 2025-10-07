@@ -43,4 +43,3 @@ public interface IAuthenticationService
     /// <returns>True if the password matches the hash.</returns>
     bool VerifyPassword(string password, string hash);
 }
-

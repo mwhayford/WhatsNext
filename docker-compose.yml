@@ -1,0 +1,82 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: whatsnext-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: whatsnext
+      POSTGRES_USER: whatsnext
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-P@ssw0rd123!}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - whatsnext-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U whatsnext"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: whatsnext-backend
+    restart: unless-stopped
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=whatsnext;Username=whatsnext;Password=${DB_PASSWORD:-P@ssw0rd123!}
+      - DatabaseProvider=PostgreSQL
+      - JwtSettings__Secret=${JWT_SECRET:-YourSuperSecretKeyThatIsAtLeast32CharactersLong!}
+      - JwtSettings__Issuer=WhatsNext
+      - JwtSettings__Audience=WhatsNext
+      - JwtSettings__ExpiryMinutes=60
+    ports:
+      - "5000:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - whatsnext-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: whatsnext-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - whatsnext-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  postgres-data:
+    driver: local
+
+networks:
+  whatsnext-network:
+    driver: bridge
+
